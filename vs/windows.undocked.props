@@ -207,6 +207,13 @@
     <ClCompile Condition="$(Platform.StartsWith('ARM64'))">
       <PreprocessorDefinitions>_ARM64_;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <!-- Debug/Release related definitions -->
+    <ClCompile Condition="'$(Configuration)'=='Debug'">
+      <PreprocessorDefinitions>DBG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Condition="'$(Configuration)'=='Release'">
+      <PreprocessorDefinitions>NDEBUG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
     <Link>
       <SubSystem Condition="'$(UndockedType)' == 'exe'">Console</SubSystem>
       <CETCompat Condition="'$(Platform)'!='ARM64'">true</CETCompat>
