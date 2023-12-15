@@ -13,9 +13,10 @@ jobs:
     build:
       runs-on: windows-latest
       strategy:
+        fail-fast: false
         matrix:
           configuration: [Debug, Release]
-          platform: [x86, x64, amd64]
+          platform: [x86, x64, ARM64]
       steps:
       - uses: actions/checkout@v2
       - name: Setup MSBuild
