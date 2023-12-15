@@ -10,7 +10,7 @@ on:
     - main
 
 jobs:
-    build:
+    Build:
       runs-on: windows-latest
       strategy:
         fail-fast: false

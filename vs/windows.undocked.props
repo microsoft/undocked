@@ -323,7 +323,7 @@
         %(AdditionalOptions)
       </AdditionalOptions>
       <AdditionalOptions Condition="$(Platform.StartsWith('ARM64'))">
-        /DynamicValueFixupSym:ki_user_shared_data=0xFFFFF78000000000
+        <!-- /DynamicValueFixupSym:ki_user_shared_data=0xFFFFF78000000000 -->
         /highentropyva
         %(AdditionalOptions)
       </AdditionalOptions>
