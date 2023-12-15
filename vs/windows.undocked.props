@@ -2,7 +2,7 @@
   <!-- Set up properties -->
   <PropertyGroup>
     <Error Condition="'$(UndockedType)' == ''">Must set UndockedType in project file</Error>
-    <UndockedDir Condition="'$(UndockedDir)' == ''">$(SolutionDir)undocking\</UndockedDir>
+    <UndockedDir Condition="'$(UndockedDir)' == ''">$(SolutionDir)undocked\</UndockedDir>
     <UndockedOut Condition="'$(UndockedOut)' == ''">$(SolutionDir)</UndockedOut>
     <UndockedLoc Condition="'$(UndockedLoc)' == ''">false</UndockedLoc>
     <UndockedVerFile Condition="'$(UndockedVerFile)' == ''">$(SolutionDir)version.json</UndockedVerFile>
