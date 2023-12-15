@@ -19,9 +19,9 @@ jobs:
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
       steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c
       - name: Build
         run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
     Build:
@@ -33,8 +33,8 @@ jobs:
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
       steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c
       - name: Build
         run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
