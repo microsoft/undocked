@@ -8,6 +8,7 @@
     <UndockedVerFile Condition="'$(UndockedVerFile)' == ''">$(SolutionDir)version.json</UndockedVerFile>
     <UndockedBuildId Condition="'$(UndockedBuildId)' == ''">0</UndockedBuildId>
     <UndockedOfficial Condition="'$(UndockedOfficial)' == ''">false</UndockedOfficial>
+    <UndockedUseDriverToolset Condition="'$(UndockedUseDriverToolset)' == ''">false</UndockedUseDriverToolset>
     <!-- Use the official LKG complier when available -->
     <UseInternalMSUniCrtPackage>true</UseInternalMSUniCrtPackage>
     <!-- Enable ARM64X unless explicitly disabled -->
@@ -91,8 +92,13 @@
     <TargetVersion>Windows10</TargetVersion>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
-    <PlatformToolset>v143</PlatformToolset>
     <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'false'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'true'">
+    <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <!-- Per-type Configuration -->
