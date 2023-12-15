@@ -1,0 +1,15 @@
+//
+//    Copyright (C) Microsoft.  All rights reserved.
+//
+
+// #include <verrsrc.h>
+// from verrsrc.h
+#define VFT_DRV                 0x00000003L
+#define VFT2_DRV_NETWORK        0x00000006L
+
+#define VER_FILEDESCRIPTION_STR     "Sample driver"
+#define VER_INTERNALNAME_STR        "drv.sys"
+#define VER_FILETYPE                VFT_DRV
+#define VER_FILESUBTYPE             VFT2_DRV_NETWORK
+
+#include "undocked.ver"

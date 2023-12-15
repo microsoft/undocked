@@ -1,0 +1,179 @@
+# This template is for building, signing, packaging and ingesting undocked Windows binaries.
+parameters:
+  # Path for the base undocked project.
+  undockedPath: 'undocked'
+  # Build args
+  sln: ''
+  prepareScript: ''
+  msbuildArgs: ''
+  restoreNugetPackages: false
+  targetOsBranch: 'official/main'
+  config: 'Debug,Release'
+  platform: 'x86,x64,arm64'
+  nativeCompiler: true
+  sign: false # Only signs UM binaries, for external (to Windows repo) release
+  # Packaging args
+  package: false
+  name: ''
+  description: ''
+  owner: ''
+  # Windows Ingestion args
+  ingest: false
+  osPath: ''
+  osBranch: ''
+  osPrTitle: ''
+
+jobs:
+
+# Cache versions for future jobs to use in packaging and ingestion.
+- ${{ if eq(parameters.package, true) }}:
+  - job: set_version
+    displayName: Set Version
+    pool:
+      type: windows
+    variables:
+      ob_outputDirectory: $(Build.SourcesDirectory)\build
+    steps:
+    - powershell: |
+        # Grab the branch name and write the env variable.
+        $Branch = "$(Build.SourceBranch)"
+        if ($Branch.StartsWith("refs/heads/")) {
+            $Branch = $Branch.Substring(11) # Remove the 'refs/heads/' prefix.
+        } elseif ($Branch.StartsWith("refs/pull/")) {
+            $Branch = "main" # Pull requests are assumed to be 'main' branch.
+        }
+        Write-Output "Branch = $Branch"
+        Write-Host "##vso[task.setvariable variable=VER_BRANCH;isOutput=true]$Branch"
+
+        # Grab the version and write the env variable.
+        $Ver = Get-Content -Raw version.json | ConvertFrom-Json
+        Write-Output "Version = $($Ver.major).$($Ver.minor).$($Ver.patch)-$(Build.BuildId)"
+        Write-Host "##vso[task.setvariable variable=VER_MAJOR;isOutput=true]$($Ver.major)"
+        Write-Host "##vso[task.setvariable variable=VER_MINOR;isOutput=true]$($Ver.minor)"
+        Write-Host "##vso[task.setvariable variable=VER_PATCH;isOutput=true]$($Ver.patch)"
+      displayName: Cache Variables
+      name: verStep
+
+# Build the solution for all the necessary configurations.
+- job: build_sln
+  displayName: ${{ parameters.sln }}
+  ${{ if eq(parameters.package, true) }}:
+    dependsOn: set_version
+  strategy:
+    matrix:
+      ${{ if and(contains(parameters.config, 'Debug'), contains(parameters.platform, 'x86')) }}:
+        x86chk:
+          ob_build_platform: x86
+          ob_build_platform_win: x86
+          ob_build_config: Debug
+          ob_build_config_win: chk
+      ${{ if and(contains(parameters.config, 'Release'), contains(parameters.platform, 'x86')) }}:
+        x86fre:
+          ob_build_platform: x86
+          ob_build_platform_win: x86
+          ob_build_config: Release
+          ob_build_config_win: fre
+      ${{ if and(contains(parameters.config, 'Debug'), contains(parameters.platform, 'x64')) }}:
+        amd64chk:
+          ob_build_platform: x64
+          ob_build_platform_win: amd64
+          ob_build_config: Debug
+          ob_build_config_win: chk
+      ${{ if and(contains(parameters.config, 'Release'), contains(parameters.platform, 'x64')) }}:
+        amd64fre:
+          ob_build_platform: x64
+          ob_build_platform_win: amd64
+          ob_build_config: Release
+          ob_build_config_win: fre
+      ${{ if and(contains(parameters.config, 'Debug'), contains(parameters.platform, 'arm64')) }}:
+        arm64chk:
+          ob_build_platform: arm64
+          ob_build_platform_win: arm64
+          ob_build_config: Debug
+          ob_build_config_win: chk
+      ${{ if and(contains(parameters.config, 'Release'), contains(parameters.platform, 'arm64')) }}:
+        arm64fre:
+          ob_build_platform: arm64
+          ob_build_platform_win: arm64
+          ob_build_config: Release
+          ob_build_config_win: fre
+  pool:
+    type: windows
+  variables:
+    ver_branch: $[ dependencies.set_version.outputs['verStep.VER_BRANCH'] ]
+    ver_major: $[ dependencies.set_version.outputs['verStep.VER_MAJOR'] ]
+    ver_minor: $[ dependencies.set_version.outputs['verStep.VER_MINOR'] ]
+    ver_patch: $[ dependencies.set_version.outputs['verStep.VER_PATCH'] ]
+    # Build variables
+    ob_outputDirectory: $(Build.SourcesDirectory)\build\bin\$(ob_build_platform_win)$(ob_build_config_win)
+    ob_artifactSuffix: _$(ob_build_platform_win)$(ob_build_config_win)
+    # https://aka.ms/obpipelines/sdl
+    ob_sdl_tsa_enabled: false # When TSA is disabled all SDL tools will forced into 'break' build mode.
+    ob_sdl_binskim_break: true
+    ob_sdl_policheck_break: true
+    ${{ if eq(parameters.sign, true) }}:
+      ob_sdl_codeSignValidation_excludes: -|**\*.sys # Disable signing requirements for KM builds
+    ${{ if eq(parameters.sign, false) }}:
+      ob_sdl_codeSignValidation_excludes: -|**\*.sys;-|**\*.dll;-|**\*.exe # Disable signing requirements for UM & KM builds
+    # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-windows-undocked/onebranch-windows-undocked/template/thingstoupdateinstartertemplate#1-windows-undocked-native-compiler-task
+    ob_NativeCompiler_enabled: ${{ parameters.nativeCompiler }}
+    ob_NativeCompiler_TaskVerbosity: 'Detailed'
+    ob_NativeCompiler_UseOSBranchVersion: true
+    ob_NativeCompiler_TargetOsBranch: ${{ parameters.targetOsBranch }}
+    ob_NativeCompiler_UcrtPlatform: 'amd64'
+    # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-windows-undocked/onebranch-windows-undocked/template/thingstoupdateinstartertemplate#2-set-feature-flags---createvpack-and-updateosmanifest
+    ${{ if eq(parameters.package, true) }}:
+      ob_createvpack_enabled: true
+      ob_createvpack_owneralias: ${{ parameters.owner }}
+      ob_createvpack_packagename: "${{ parameters.name }}.$(ob_build_platform_win)$(ob_build_config_win)"
+      ob_createvpack_description: "${{ parameters.name }}.$(ver_branch)"
+      ob_createvpack_versionAs: string
+      ob_createvpack_version: $(ver_major).$(ver_minor).$(ver_patch)-$(Build.BuildId)
+  steps:
+  - ${{ if ne(parameters.prepareScript, '') }}:
+    - task: PowerShell@2
+      displayName: Prepare
+      inputs:
+        targetType: inline
+        script: ${{ parameters.prepareScript }}
+  - task: VSBuild@1
+    displayName: Build
+    target: windows_build_container
+    inputs:
+      solution: ${{ parameters.sln }}
+      platform: $(ob_build_platform)
+      configuration: $(ob_build_config)
+      maximumCpuCount: true
+      restoreNugetPackages: ${{ parameters.restoreNugetPackages }}
+      msbuildArgs: '-p:UndockedOfficial=${{ parameters.nativeCompiler }} -p:UndockedBuildId=$(Build.BuildId) ${{ parameters.msbuildArgs }}'
+  - ${{ if eq(parameters.sign, true) }}:
+    # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-platform-services/onebranch/signing
+    - task: onebranch.pipeline.signing@1
+      displayName: 'Sign Binaries'
+      target: windows_build_container
+      inputs:
+        command: 'sign'
+        signing_profile: 'external_distribution'
+        files_to_sign: '**/*.exe;**/*.dll' # Only supports usermode binaries
+        search_root: 'build/bin'
+
+# Ingest the newly built VPacks
+- ${{ if and(eq(parameters.package, true), eq(parameters.ingest, true)) }}:
+  - job: ingest
+    displayName: Ingest to Windows
+    dependsOn: build_sln
+    pool:
+      type: windows
+    variables:
+      ob_outputDirectory: $(Build.SourcesDirectory)\build
+      # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-windows-undocked/onebranch-windows-undocked/template/thingstoupdateinstartertemplate#updateosmanifest-parameter
+      ob_updateOSManifest_enabled: true
+      ob_updateOSManifest_skipFetch: true
+      ob_updateOSManifest_gitcheckinConfigPath: '$(Build.SourcesDirectory)/build/GitCheckin.json'
+      ob_updateOSManifest_destination: '$(Build.SourcesDirectory)/build'
+    steps:
+    - task: PowerShell@2
+      displayName: Prepare Git Checkin
+      inputs:
+        filePath: ${{ parameters.owner }}/onebranch/prepare-ingest.ps1
+        arguments: -Name "${{ parameters.name }}" -Description "${{ parameters.description }}" -Repo $(Build.Repository.Uri) -Branch $(Build.SourceBranch) -Commit $(Build.SourceVersion) -Owner "${{ parameters.owner }}" -BuildPipelineId $(Build.BuildId) -OsPath "${{ parameters.osPath }}" -OsBranch "${{ parameters.osBranch }}" -OsPrTitle "${{ parameters.osPrTitle }}"

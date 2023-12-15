@@ -1,0 +1,24 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+    build:
+      runs-on: windows-latest
+      strategy:
+        matrix:
+          configuration: [Debug, Release]
+          platform: [x86, x64, amd64]
+      steps:
+      - uses: actions/checkout@v2
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v1
+      - name: Build
+        run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}

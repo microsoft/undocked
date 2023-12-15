@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{fcba1469-6a37-4243-9325-8f60401c0435}</ProjectGuid>
+    <TargetName>dll</TargetName>
+    <UndockedType>dll</UndockedType>
+    <UndockedDir>$(SolutionDir)..\</UndockedDir>
+    <UndockedOut>$(SolutionDir)..\</UndockedOut>
+  </PropertyGroup>
+  <Import Project="$(UndockedDir)vs\windows.undocked.props" />
+  <ItemGroup>
+    <ClCompile Include="library.c" />
+    <ResourceCompile Include="dll.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

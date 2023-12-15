@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{2e07f09d-5ebc-4f09-b522-184e5ca1597c}</ProjectGuid>
+    <TargetName>lib</TargetName>
+    <UndockedType>lib</UndockedType>
+    <UndockedDir>$(SolutionDir)..\</UndockedDir>
+    <UndockedOut>$(SolutionDir)..\</UndockedOut>
+  </PropertyGroup>
+  <Import Project="$(UndockedDir)vs\windows.undocked.props" />
+  <ItemGroup>
+    <ClCompile Include="static_library.c" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

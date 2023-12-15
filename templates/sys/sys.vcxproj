@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{f72e4825-4241-4bf2-81f3-e85cee354bd7}</ProjectGuid>
+    <TargetName>sys</TargetName>
+    <UndockedType>sys</UndockedType>
+    <UndockedDir>$(SolutionDir)..\</UndockedDir>
+    <UndockedOut>$(SolutionDir)..\</UndockedOut>
+  </PropertyGroup>
+  <Import Project="$(UndockedDir)vs\windows.undocked.props" />
+  <ItemGroup>
+    <ClCompile Include="driver.c" />
+    <ResourceCompile Include="sys.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
