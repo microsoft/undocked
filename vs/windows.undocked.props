@@ -97,6 +97,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'false'">
     <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset Condition="'$(VisualStudioVersion)' == '16.0'">v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'true'">
     <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
