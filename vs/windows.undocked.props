@@ -9,6 +9,7 @@
     <UndockedBuildId Condition="'$(UndockedBuildId)' == ''">0</UndockedBuildId>
     <UndockedOfficial Condition="'$(UndockedOfficial)' == ''">false</UndockedOfficial>
     <UndockedUseDriverToolset Condition="'$(UndockedUseDriverToolset)' == ''">false</UndockedUseDriverToolset>
+    <UndockedKernelModeBuild>false</UndockedKernelModeBuild>
     <!-- Use the official LKG complier when available -->
     <UseInternalMSUniCrtPackage>true</UseInternalMSUniCrtPackage>
     <!-- Enable ARM64X unless explicitly disabled -->
@@ -112,6 +113,12 @@
   <PropertyGroup Condition="'$(UndockedType)' == 'exe'">
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(UndockedType)' == 'drvlib'">
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <DriverType>KMDF</DriverType>
+    <UndockedKernelModeBuild>true</UndockedKernelModeBuild>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedType)' == 'sys'">
     <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <ConfigurationType>Driver</ConfigurationType>
@@ -165,6 +172,7 @@
     <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
     <SignMode>Off</SignMode>
     <EnableInf2cat>false</EnableInf2cat>
+    <InfVerif_AdditionalOptions>/msft</InfVerif_AdditionalOptions>
     <SpectreMitigation>Spectre</SpectreMitigation>
     <Driver_SpectreMitigation>Spectre</Driver_SpectreMitigation>
   </PropertyGroup>
@@ -179,6 +187,14 @@
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(IntDir);$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SupportJustMyCode></SupportJustMyCode> <!-- Disable /JMC -->
+      <PreprocessorDefinitions Condition="$(UndockedKernelModeBuild)">
+        KERNEL_MODE=1;
+        %(ClCompile.PreprocessorDefinitions)
+      </PreprocessorDefinitions>
+      <PreprocessorDefinitions Condition="'$(UndockedKernelModeBuild)'=='false'">
+        USER_MODE=1;
+        %(ClCompile.PreprocessorDefinitions)
+      </PreprocessorDefinitions>
     </ClCompile>
     <!-- Architecture definitions for certain header files from Windows Kits -->
     <ClCompile Condition="'$(Platform)'=='Win32'">
@@ -262,7 +278,7 @@
         /ZH:SHA_256
         /Zp8
       </AdditionalOptions>
-      <AdditionalOptions Condition="'$(UndockedType)'=='SYS'">
+      <AdditionalOptions Condition="$(UndockedKernelModeBuild)">
         /kernel
         %(AdditionalOptions)
       </AdditionalOptions>
@@ -305,7 +321,7 @@
         /tsaware
         %(AdditionalOptions)
       </AdditionalOptions>
-      <AdditionalOptions Condition="'$(UndockedType)'=='SYS'">
+      <AdditionalOptions Condition="$(UndockedKernelModeBuild)">
         /d2:-guardcfgdispatch
         /guard:exportsuppress
         /kernel
