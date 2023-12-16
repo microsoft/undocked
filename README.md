@@ -4,17 +4,17 @@ The goal of this project is to provide helpers for Windows components to build e
 
 This project provides two main components:
 
-- [windows.undocked.props](vs\windows.undocked.props) - Visual Studio property file to simplify components' project files.
-- [build.yml](v1\build.yml) - Azure Pipelines template to correctly build in OneBranch (Microsoft's **internal** Azure Pipelines sandbox).
+- [windows.undocked.props](vs/windows.undocked.props) - Visual Studio property file to simplify components' project files.
+- [build.yml](v1/build.yml) - Azure Pipelines template to correctly build in OneBranch (Microsoft's **internal** Azure Pipelines sandbox).
 
 ## Usage
 
 To use this project in your component, you must:
 
 1. Submodule this repository into your component's repository.
-1. Create a `version.json` file to hold your component's version (see [example](templates\version.json)).
+1. Create a `version.json` file to hold your component's version (see [example](templates/version.json)).
 1. Update your component's project files to set the undocked variables (see [examples](templates)).
-1. Import [windows.undocked.props](vs\windows.undocked.props). (After this, you should be able to build locally.)
+1. Import [windows.undocked.props](vs/windows.undocked.props). (After this, you should be able to build locally.)
 1. Copy the `.azure` directory into your project.
 1. Update the `OneBranch.*.yml` files as necessary for your project.
 1. Onboard these new pipelines to OneBranch.
