@@ -5,6 +5,7 @@
     <UndockedDir Condition="'$(UndockedDir)' == ''">$(SolutionDir)undocked\</UndockedDir>
     <UndockedOut Condition="'$(UndockedOut)' == ''">$(SolutionDir)build\</UndockedOut>
     <UndockedLoc Condition="'$(UndockedLoc)' == ''">false</UndockedLoc>
+    <UndockedSourceLink Condition="'$(UndockedSourceLink)' == ''">false</UndockedSourceLink>
     <UndockedVerFile Condition="'$(UndockedVerFile)' == ''">$(SolutionDir)version.json</UndockedVerFile>
     <UndockedBuildId Condition="'$(UndockedBuildId)' == ''">0</UndockedBuildId>
     <UndockedOfficial Condition="'$(UndockedOfficial)' == ''">false</UndockedOfficial>
@@ -88,6 +89,11 @@
     <WinPlat Condition="'$(Platform)' == 'ARM64'">arm64</WinPlat>
     <WinPlat Condition="'$(Platform)' == 'ARM64EC'">arm64ec</WinPlat>
   </PropertyGroup>
+  <!--The following lines configure the properties needed for sourcelink support -->
+  <Import Project="$(SolutionDir)packages\Microsoft.SourceLink.AzureRepos.Git.1.0.0\build\Microsoft.SourceLink.AzureRepos.Git.props" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.SourceLink.AzureRepos.Git.1.0.0\build\Microsoft.SourceLink.AzureRepos.Git.props')" />
+  <Import Project="$(SolutionDir)packages\Microsoft.SourceLink.GitHub.1.0.0\build\Microsoft.SourceLink.GitHub.props" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.SourceLink.GitHub.1.0.0\build\Microsoft.SourceLink.GitHub.props')" />
+  <Import Project="$(SolutionDir)packages\Microsoft.SourceLink.Common.1.0.0\build\Microsoft.SourceLink.Common.props" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.SourceLink.Common.1.0.0\build\Microsoft.SourceLink.Common.props')" />
+  <Import Project="$(SolutionDir)packages\Microsoft.Build.Tasks.Git.1.0.0\build\Microsoft.Build.Tasks.Git.props" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.Build.Tasks.Git.1.0.0\build\Microsoft.Build.Tasks.Git.props')" />
   <!-- Default global properties -->
   <PropertyGroup>
     <TargetVersion>Windows10</TargetVersion>

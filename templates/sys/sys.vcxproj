@@ -6,11 +6,12 @@
     <UndockedType>sys</UndockedType>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
+    <UndockedSourceLink>true</UndockedSourceLink>
   </PropertyGroup>
   <Import Project="$(UndockedDir)vs\windows.undocked.props" />
   <ItemGroup>
     <ClCompile Include="driver.c" />
     <ResourceCompile Include="sys.rc" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(UndockedDir)vs\windows.undocked.targets" />
 </Project>

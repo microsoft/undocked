@@ -6,6 +6,7 @@
     <UndockedType>exe</UndockedType>
     <UndockedLoc>true</UndockedLoc>
     <UndockedUseDriverToolset>true</UndockedUseDriverToolset>
+    <UndockedSourceLink>true</UndockedSourceLink>
     <CharacterSet>Unicode</CharacterSet>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
@@ -16,5 +17,5 @@
     <ResourceCompile Include="exe.rc" />
     <MessageCompile Include="localmsg.mc" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(UndockedDir)vs\windows.undocked.targets" />
 </Project>

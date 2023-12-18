@@ -2,9 +2,10 @@
 
 The goal of this project is to provide helpers for Windows components to build exactly as they would internally in the Windows OS repository, but without a lot of complicated manual steps.
 
-This project provides two main components:
+This project provides three main components:
 
 - [windows.undocked.props](vs/windows.undocked.props) - Visual Studio property file to simplify components' project files.
+- [windows.undocked.targets](vs/windows.undocked.targets) - Similar to the .props file, but only required if source link is being used.
 - [build.yml](onebranch/v1/build.yml) - Azure Pipelines template to correctly build in OneBranch (Microsoft's **internal** Azure Pipelines sandbox).
 
 ## Usage
