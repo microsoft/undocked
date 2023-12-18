@@ -4,6 +4,8 @@
     <ProjectGuid>{82ad99b5-baa2-4d92-9faa-6dd599659a34}</ProjectGuid>
     <TargetName>exe</TargetName>
     <UndockedType>exe</UndockedType>
+    <UndockedLoc>true</UndockedLoc>
+    <CharacterSet>Unicode</CharacterSet>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\</UndockedOut>
   </PropertyGroup>
@@ -11,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="main.c" />
     <ResourceCompile Include="exe.rc" />
+    <MessageCompile Include="localmsg.mc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
