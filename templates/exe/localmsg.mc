@@ -10,7 +10,7 @@ Usage: exe
 Options: NONE
 .
 
-MessageId=10001 SymbolicName=PING_MESSAGE_1
+MessageId=10001 SymbolicName=EXE_MESSAGE_1
 Language=English
 This is a sample message.
 .
