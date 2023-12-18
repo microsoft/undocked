@@ -6,10 +6,11 @@
     <UndockedType>lib</UndockedType>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
+    <UndockedSourceLink>true</UndockedSourceLink>
   </PropertyGroup>
   <Import Project="$(UndockedDir)vs\windows.undocked.props" />
   <ItemGroup>
     <ClCompile Include="static_library.c" />
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(UndockedDir)vs\windows.undocked.targets" />
 </Project>
