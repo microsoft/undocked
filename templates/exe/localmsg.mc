@@ -7,7 +7,6 @@ MessageId=10000 SymbolicName=EXE_USAGE
 Language=English
 
 Usage: exe
-
 Options: NONE
 .
 

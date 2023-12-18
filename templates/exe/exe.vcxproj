@@ -5,6 +5,7 @@
     <TargetName>exe</TargetName>
     <UndockedType>exe</UndockedType>
     <UndockedLoc>true</UndockedLoc>
+    <UndockedUseDriverToolset>true</UndockedUseDriverToolset>
     <CharacterSet>Unicode</CharacterSet>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\</UndockedOut>
