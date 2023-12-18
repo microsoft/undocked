@@ -10,3 +10,4 @@
 #define	VER_FILESUBTYPE	            VFT2_UNKNOWN
 
 #include "undocked.ver"
+#include "localmsg.rc"
