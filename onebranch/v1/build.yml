@@ -11,6 +11,7 @@ parameters:
   config: 'Debug,Release'
   platform: 'x86,x64,arm64'
   nativeCompiler: true
+  outputDirectory: 'build'
   sign: false # Only signs UM binaries, for external (to Windows repo) release
   # Packaging args
   package: false
@@ -32,7 +33,7 @@ jobs:
     pool:
       type: windows
     variables:
-      ob_outputDirectory: $(Build.SourcesDirectory)\build
+      ob_outputDirectory: $(Build.SourcesDirectory)\${{ parameters.outputDirectory }}
     steps:
     - powershell: |
         # Grab the branch name and write the env variable.
@@ -105,7 +106,7 @@ jobs:
     ver_minor: $[ dependencies.set_version.outputs['verStep.VER_MINOR'] ]
     ver_patch: $[ dependencies.set_version.outputs['verStep.VER_PATCH'] ]
     # Build variables
-    ob_outputDirectory: $(Build.SourcesDirectory)\build\bin\$(ob_build_platform_win)$(ob_build_config_win)
+    ob_outputDirectory: $(Build.SourcesDirectory)\${{ parameters.outputDirectory }}\bin\$(ob_build_platform_win)$(ob_build_config_win)
     ob_artifactSuffix: _$(ob_build_platform_win)$(ob_build_config_win)
     # https://aka.ms/obpipelines/sdl
     ob_sdl_tsa_enabled: false # When TSA is disabled all SDL tools will forced into 'break' build mode.
@@ -155,7 +156,7 @@ jobs:
         command: 'sign'
         signing_profile: 'external_distribution'
         files_to_sign: '**/*.exe;**/*.dll' # Only supports usermode binaries
-        search_root: 'build/bin'
+        search_root: '${{ parameters.outputDirectory }}/bin'
 
 # Ingest the newly built VPacks
 - ${{ if and(eq(parameters.package, true), eq(parameters.ingest, true)) }}:
@@ -165,15 +166,15 @@ jobs:
     pool:
       type: windows
     variables:
-      ob_outputDirectory: $(Build.SourcesDirectory)\build
+      ob_outputDirectory: $(Build.SourcesDirectory)\${{ parameters.outputDirectory }}
       # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-windows-undocked/onebranch-windows-undocked/template/thingstoupdateinstartertemplate#updateosmanifest-parameter
       ob_updateOSManifest_enabled: true
       ob_updateOSManifest_skipFetch: true
-      ob_updateOSManifest_gitcheckinConfigPath: '$(Build.SourcesDirectory)/build/GitCheckin.json'
-      ob_updateOSManifest_destination: '$(Build.SourcesDirectory)/build'
+      ob_updateOSManifest_gitcheckinConfigPath: '$(Build.SourcesDirectory)/${{ parameters.outputDirectory }}/GitCheckin.json'
+      ob_updateOSManifest_destination: '$(Build.SourcesDirectory)/${{ parameters.outputDirectory }}'
     steps:
     - task: PowerShell@2
       displayName: Prepare Git Checkin
       inputs:
         filePath: ${{ parameters.owner }}/onebranch/prepare-ingest.ps1
-        arguments: -Name "${{ parameters.name }}" -Description "${{ parameters.description }}" -Repo $(Build.Repository.Uri) -Branch $(Build.SourceBranch) -Commit $(Build.SourceVersion) -Owner "${{ parameters.owner }}" -BuildPipelineId $(Build.BuildId) -OsPath "${{ parameters.osPath }}" -OsBranch "${{ parameters.osBranch }}" -OsPrTitle "${{ parameters.osPrTitle }}"
+        arguments: -Name "${{ parameters.name }}" -Description "${{ parameters.description }}" -Repo $(Build.Repository.Uri) -Branch $(Build.SourceBranch) -Commit $(Build.SourceVersion) -Owner "${{ parameters.owner }}" -BuildPipelineId $(Build.BuildId) -OsPath "${{ parameters.osPath }}" -OsBranch "${{ parameters.osBranch }}" -OsPrTitle "${{ parameters.osPrTitle }}" -OutDir "${{ parameters.outputDirectory }}"

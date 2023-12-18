@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Error Condition="'$(UndockedType)' == ''">Must set UndockedType in project file</Error>
     <UndockedDir Condition="'$(UndockedDir)' == ''">$(SolutionDir)undocked\</UndockedDir>
-    <UndockedOut Condition="'$(UndockedOut)' == ''">$(SolutionDir)</UndockedOut>
+    <UndockedOut Condition="'$(UndockedOut)' == ''">$(SolutionDir)build\</UndockedOut>
     <UndockedLoc Condition="'$(UndockedLoc)' == ''">false</UndockedLoc>
     <UndockedVerFile Condition="'$(UndockedVerFile)' == ''">$(SolutionDir)version.json</UndockedVerFile>
     <UndockedBuildId Condition="'$(UndockedBuildId)' == ''">0</UndockedBuildId>
@@ -167,8 +167,8 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <!-- Official Windows compiler and linker settings -->
   <PropertyGroup>
-    <IntDir>$(UndockedOut)build\obj\$(WinPlat)$(WinConfig)\$(ProjectName)\</IntDir>
-    <OutDir>$(UndockedOut)build\bin\$(WinPlat)$(WinConfig)\</OutDir>
+    <IntDir>$(UndockedOut)obj\$(WinPlat)$(WinConfig)\$(ProjectName)\</IntDir>
+    <OutDir>$(UndockedOut)bin\$(WinPlat)$(WinConfig)\</OutDir>
     <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
     <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
     <SignMode>Off</SignMode>
