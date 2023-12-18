@@ -5,7 +5,7 @@
     <TargetName>lib</TargetName>
     <UndockedType>lib</UndockedType>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
-    <UndockedOut>$(SolutionDir)..\</UndockedOut>
+    <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
   </PropertyGroup>
   <Import Project="$(UndockedDir)vs\windows.undocked.props" />
   <ItemGroup>

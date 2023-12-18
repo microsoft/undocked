@@ -34,7 +34,10 @@ param (
     [string]$OsBranch,          # i.e., official/rs_onecore_liof1_stack
 
     [Parameter(Mandatory = $true)]
-    [string]$OsPrTitle          # i.e., Automated: Ingest Ping
+    [string]$OsPrTitle,         # i.e., Automated: Ingest Ping
+
+    [Parameter(Mandatory = $true)]
+    [string]$OutDir            # i.e., build
 )
 
 Set-StrictMode -Version "Latest";
@@ -108,13 +111,13 @@ $Manifest = $Manifest.Replace("REPLACE_WITH_VERSION", $Version)
 $Manifest = $Manifest.Replace("REPLACE_WITH_OWNER", $Owner)
 $Manifest = $Manifest.Replace("REPLACE_WITH_BUILD_ID", $BuildPipelineId)
 
-mkdir build -ErrorAction Ignore | Out-Null
+mkdir $OutDir -ErrorAction Ignore | Out-Null
 
-$Manifest | Out-File "build/$($Name).man"
+$Manifest | Out-File "$OutDir/$($Name).man"
 Write-Output "`n$($Name).man:`n"
 Write-Output $Manifest
 
 $Checkin = [GitCheckin]::new($Name, $OsPath, $OsBranch, $OsPrTitle) | ConvertTo-Json -Depth 100
-$Checkin | Out-File "build/GitCheckin.json"
+$Checkin | Out-File "$OutDir/GitCheckin.json"
 Write-Output "`nGitCheckin.json:`n"
 Write-Output $Checkin
