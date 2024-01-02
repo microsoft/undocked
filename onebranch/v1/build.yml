@@ -176,5 +176,5 @@ jobs:
     - task: PowerShell@2
       displayName: Prepare Git Checkin
       inputs:
-        filePath: ${{ parameters.owner }}/onebranch/prepare-ingest.ps1
+        filePath: ${{ parameters.undockedPath }}/onebranch/prepare-ingest.ps1
         arguments: -Name "${{ parameters.name }}" -Description "${{ parameters.description }}" -Repo $(Build.Repository.Uri) -Branch $(Build.SourceBranch) -Commit $(Build.SourceVersion) -Owner "${{ parameters.owner }}" -BuildPipelineId $(Build.BuildId) -OsPath "${{ parameters.osPath }}" -OsBranch "${{ parameters.osBranch }}" -OsPrTitle "${{ parameters.osPrTitle }}" -OutDir "${{ parameters.outputDirectory }}"
