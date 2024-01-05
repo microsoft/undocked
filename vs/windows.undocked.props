@@ -11,10 +11,10 @@
     <UndockedOfficial Condition="'$(UndockedOfficial)' == ''">false</UndockedOfficial>
     <UndockedUseDriverToolset Condition="'$(UndockedUseDriverToolset)' == ''">false</UndockedUseDriverToolset>
     <UndockedKernelModeBuild>false</UndockedKernelModeBuild>
+    <!-- Disable ARM64X unless explicitly enabled -->
+    <UndockdedBuildArm64x Condition="'$(UndockdedBuildArm64x)' == '' OR $(ARM64X_DISABLED) == '1'">false</UndockdedBuildArm64x>
     <!-- Use the official LKG complier when available -->
     <UseInternalMSUniCrtPackage>true</UseInternalMSUniCrtPackage>
-    <!-- Enable ARM64X unless explicitly disabled -->
-    <EnableArm64x Condition="$(ARM64X_DISABLED) != '1'">true</EnableArm64x>
   </PropertyGroup>
   <!-- The set of supported user mode configurations (x86,x64,arm,arm64) -->
   <ItemGroup Label="ProjectConfigurations" Condition="'$(UndockedType)' != 'sys'">
@@ -226,7 +226,7 @@
     </Link>
   </ItemDefinitionGroup>
   <!-- Enable ARM64X compilation -->
-  <PropertyGroup Condition="'$(Platform)'=='ARM64' AND '$(UndockedType)' != 'sys' AND '$(UndockedType)' != 'drvlib' AND '$(UndockedType)' != 'exe' AND '$(EnableArm64x)' == 'true'">
+  <PropertyGroup Condition="'$(Platform)'=='ARM64' AND '$(UndockedType)' != 'sys' AND '$(UndockedType)' != 'drvlib' AND '$(UndockedType)' != 'exe' AND '$(UndockdedBuildArm64x)' == 'true'">
     <BuildAsX>true</BuildAsX>
   </PropertyGroup>
   <!-- Unofficial build flags, but close enough for local testing -->
