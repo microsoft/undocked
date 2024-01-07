@@ -8,6 +8,27 @@ This project provides three main components:
 - [windows.undocked.targets](vs/windows.undocked.targets) - Similar to the .props file, but only required if source link is being used.
 - [build.yml](onebranch/v1/build.yml) - Azure Pipelines template to correctly build in OneBranch (Microsoft's **internal** Azure Pipelines sandbox).
 
+# Example
+
+With these helpers, new `vcxproj` files can be easily created, understood and maintained by a human. The following is an example for `myapp.exe`.
+
+```xml
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{4b452093-0ce2-4305-811a-06573ccab3c5}</ProjectGuid>
+    <TargetName>myapp</TargetName>
+    <UndockedType>exe</UndockedType>
+  </PropertyGroup>
+  <Import Project="$(UndockedDir)vs\windows.undocked.props" />
+  <ItemGroup>
+    <ClCompile Include="main.c" />
+    <ResourceCompile Include="myapp.rc" />
+  </ItemGroup>
+  <Import Project="$(UndockedDir)vs\windows.undocked.targets" />
+</Project>
+```
+
 ## Usage
 
 To use this project in your component, you must:
