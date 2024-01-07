@@ -14,7 +14,7 @@ With these helpers, new `vcxproj` files can be easily created, understood and ma
 
 ```xml
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{4b452093-0ce2-4305-811a-06573ccab3c5}</ProjectGuid>
     <TargetName>myapp</TargetName>
