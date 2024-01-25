@@ -5,6 +5,7 @@ parameters:
   # Build args
   sln: ''
   prepareScript: ''
+  postBuildScript: ''
   msbuildArgs: ''
   restoreNugetPackages: false
   targetOsBranch: 'official/main'
@@ -157,6 +158,12 @@ jobs:
         signing_profile: 'external_distribution'
         files_to_sign: '**/*.exe;**/*.dll' # Only supports usermode binaries
         search_root: '${{ parameters.outputDirectory }}/bin'
+  - ${{ if ne(parameters.postBuildScript, '') }}:
+    - task: PowerShell@2
+      displayName: 'PostBuild Script'
+      inputs:
+        targetType: inline
+        script: ${{ parameters.postBuildScript }}
 
 # Ingest the newly built VPacks
 - ${{ if and(eq(parameters.package, true), eq(parameters.ingest, true)) }}:
