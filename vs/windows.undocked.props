@@ -194,6 +194,7 @@
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
       <AdditionalIncludeDirectories>$(IntDir);$(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SupportJustMyCode></SupportJustMyCode> <!-- Disable /JMC -->
+      <TreatWarningAsError>true</TreatWarningAsError>
       <PreprocessorDefinitions Condition="$(UndockedKernelModeBuild)">
         KERNEL_MODE=1;
         %(ClCompile.PreprocessorDefinitions)
