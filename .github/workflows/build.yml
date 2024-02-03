@@ -21,7 +21,7 @@ jobs:
       steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
       - name: Nuget Restore
         run: nuget.exe restore templates/templates.sln
       - name: Build
@@ -37,7 +37,7 @@ jobs:
       steps:
       - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
       - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
       - name: Nuget Restore
         run: nuget.exe restore templates/templates.sln
       - name: Build
