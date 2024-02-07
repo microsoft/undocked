@@ -151,7 +151,7 @@
         <PreprocessorDefinitions>
           VER_MAJOR=$(VER_MAJOR);
           VER_MINOR=$(VER_MINOR);
-          VER_MINOR=$(VER_MINOR);
+          VER_PATCH=$(VER_PATCH);
           VER_BUILD_ID=$(UndockedBuildId);
           VER_GIT_HASH=$(VER_GIT_HASH);
           %(ClCompile.PreprocessorDefinitions)
@@ -161,7 +161,7 @@
         <PreprocessorDefinitions>
           VER_MAJOR=$(VER_MAJOR);
           VER_MINOR=$(VER_MINOR);
-          VER_MINOR=$(VER_MINOR);
+          VER_PATCH=$(VER_PATCH);
           VER_BUILD_ID=$(UndockedBuildId);
           VER_GIT_HASH=$(VER_GIT_HASH);
           %(ResourceCompile.PreprocessorDefinitions)
