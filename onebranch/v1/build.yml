@@ -116,7 +116,7 @@ jobs:
     ${{ if eq(parameters.sign, true) }}:
       ob_sdl_codeSignValidation_excludes: -|**\*.sys # Disable signing requirements for KM builds
     ${{ if eq(parameters.sign, false) }}:
-      ob_sdl_codeSignValidation_excludes: -|**\*.sys;-|**\*.dll;-|**\*.exe # Disable signing requirements for UM & KM builds
+      ob_sdl_codeSignValidation_excludes: -|**\*.sys;-|**\*.dll;-|**\*.exe;-|**\*.ps1 # Disable signing requirements for UM & KM builds
     # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-windows-undocked/onebranch-windows-undocked/template/thingstoupdateinstartertemplate#1-windows-undocked-native-compiler-task
     ob_NativeCompiler_enabled: ${{ parameters.nativeCompiler }}
     ob_NativeCompiler_TaskVerbosity: 'Detailed'
