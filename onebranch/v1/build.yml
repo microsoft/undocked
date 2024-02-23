@@ -7,7 +7,9 @@ parameters:
   prepareScript: ''
   postBuildScript: ''
   msbuildArgs: ''
+  # restoreNugetPackages deprecated. Please use nugetConfigPath.
   restoreNugetPackages: false
+  nugetConfigPath: ''
   targetOsBranch: 'official/main'
   config: 'Debug,Release'
   platform: 'x86,x64,arm64'
@@ -138,6 +140,14 @@ jobs:
       inputs:
         targetType: inline
         script: ${{ parameters.prepareScript }}
+  - ${{ if ne(parameters.nugetConfigPath, '') }}:
+    - task: NuGetCommand@2
+      displayName: 'Restore Nuget Packages'
+      inputs:
+        command: 'restore'
+        restoreSolution: ${{ parameters.sln }}
+        feedsToUse: 'config'
+        nugetConfigPath: ${{ parameters.nugetConfigPath }}
   - task: VSBuild@1
     displayName: Build
     target: windows_build_container
