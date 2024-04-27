@@ -7,7 +7,7 @@ parameters:
   prepareScript: ''
   postBuildScript: ''
   msbuildArgs: ''
-  # restoreNugetPackages deprecated. Please use nugetConfigPath.
+  # Set restoreNugetPackages or nugetConfigPath to restore NuGet packages.
   restoreNugetPackages: false
   nugetConfigPath: ''
   targetOsBranch: 'official/main'
@@ -140,7 +140,7 @@ jobs:
       inputs:
         targetType: inline
         script: ${{ parameters.prepareScript }}
-  - ${{ if ne(parameters.nugetConfigPath, '') }}:
+  - ${{ if or(parameters.restoreNugetPackages, ne(parameters.nugetConfigPath, '')) }}:
     - task: NuGetCommand@2
       displayName: 'Restore Nuget Packages'
       inputs:
@@ -156,7 +156,6 @@ jobs:
       platform: $(ob_build_platform)
       configuration: $(ob_build_config)
       maximumCpuCount: true
-      restoreNugetPackages: ${{ parameters.restoreNugetPackages }}
       msbuildArgs: '-p:UndockedOfficial=${{ parameters.nativeCompiler }} -p:UndockedBuildId=$(Build.BuildId) ${{ parameters.msbuildArgs }}'
   - ${{ if eq(parameters.sign, true) }}:
     # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-platform-services/onebranch/signing
