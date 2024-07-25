@@ -10,6 +10,8 @@
     <UndockedBuildId Condition="'$(UndockedBuildId)' == ''">0</UndockedBuildId>
     <UndockedOfficial Condition="'$(UndockedOfficial)' == ''">false</UndockedOfficial>
     <UndockedUseDriverToolset Condition="'$(UndockedUseDriverToolset)' == ''">false</UndockedUseDriverToolset>
+    <UndockedSigning Condition="'$(UndockedSigning)' == ''">false</UndockedSigning>
+    <UndockedVersioning Condition="'$(UndockedVersioning)' == ''">true</UndockedVersioning>
     <UndockedKernelModeBuild>false</UndockedKernelModeBuild>
     <!-- Disable ARM64X unless explicitly enabled -->
     <UndockedBuildArm64x Condition="'$(UndockedBuildArm64x)' == '' OR $(ARM64X_DISABLED) == '1'">false</UndockedBuildArm64x>
@@ -133,37 +135,37 @@
     <UndockedKernelModeBuild>true</UndockedKernelModeBuild>
   </PropertyGroup>
   <!-- Calculate version properties for resource compile -->
-  <Target Name="VersionProperties" BeforeTargets="ClCompile;ResourceCompile">
+  <Target Name="VersionProperties" BeforeTargets="ClCompile;ResourceCompile" Condition="'$(UndockedVersioning)'!='false'">
     <Exec Command="git describe --long --always --exclude=* --abbrev=8" ConsoleToMSBuild="True" IgnoreExitCode="False">
-      <Output PropertyName="VER_GIT_HASH" TaskParameter="ConsoleOutput"/>
+      <Output PropertyName="UndockedGitHash" TaskParameter="ConsoleOutput"/>
     </Exec>
-    <Exec Command="PowerShell -Command &quot;(Get-Content -Raw $(UndockedVerFile) | ConvertFrom-Json).major&quot;" ConsoleToMSBuild="True" IgnoreExitCode="FALSE">
-      <Output PropertyName="VER_MAJOR" TaskParameter="ConsoleOutput"/>
+    <Exec Command="PowerShell -Command &quot;(Get-Content -Raw $(UndockedVerFile) | ConvertFrom-Json).major&quot;" ConsoleToMSBuild="True" IgnoreExitCode="False">
+      <Output PropertyName="UndockedMajorVersion" TaskParameter="ConsoleOutput"/>
     </Exec>
     <Exec Command="PowerShell -Command &quot;(Get-Content -Raw $(UndockedVerFile) | ConvertFrom-Json).minor&quot;" ConsoleToMSBuild="True" IgnoreExitCode="False">
-      <Output PropertyName="VER_MINOR" TaskParameter="ConsoleOutput"/>
+      <Output PropertyName="UndockedMinorVersion" TaskParameter="ConsoleOutput"/>
     </Exec>
     <Exec Command="PowerShell -Command &quot;(Get-Content -Raw $(UndockedVerFile) | ConvertFrom-Json).patch&quot;" ConsoleToMSBuild="True" IgnoreExitCode="False">
-      <Output PropertyName="VER_PATCH" TaskParameter="ConsoleOutput"/>
+      <Output PropertyName="UndockedPatchVersion" TaskParameter="ConsoleOutput"/>
     </Exec>
     <ItemGroup>
       <ClCompile>
         <PreprocessorDefinitions>
-          VER_MAJOR=$(VER_MAJOR);
-          VER_MINOR=$(VER_MINOR);
-          VER_PATCH=$(VER_PATCH);
+          VER_MAJOR=$(UndockedMajorVersion);
+          VER_MINOR=$(UndockedMinorVersion);
+          VER_PATCH=$(UndockedPatchVersion);
           VER_BUILD_ID=$(UndockedBuildId);
-          VER_GIT_HASH=$(VER_GIT_HASH);
+          VER_GIT_HASH=$(UndockedGitHash);
           %(ClCompile.PreprocessorDefinitions)
         </PreprocessorDefinitions>
       </ClCompile>
       <ResourceCompile>
         <PreprocessorDefinitions>
-          VER_MAJOR=$(VER_MAJOR);
-          VER_MINOR=$(VER_MINOR);
-          VER_PATCH=$(VER_PATCH);
+          VER_MAJOR=$(UndockedMajorVersion);
+          VER_MINOR=$(UndockedMinorVersion);
+          VER_PATCH=$(UndockedPatchVersion);
           VER_BUILD_ID=$(UndockedBuildId);
-          VER_GIT_HASH=$(VER_GIT_HASH);
+          VER_GIT_HASH=$(UndockedGitHash);
           %(ResourceCompile.PreprocessorDefinitions)
         </PreprocessorDefinitions>
       </ResourceCompile>
@@ -177,7 +179,10 @@
     <OutDir>$(UndockedOut)bin\$(WinPlat)$(WinConfig)\</OutDir>
     <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
     <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
-    <SignMode>Off</SignMode>
+    <SignMode Condition="'$(UndockedSigning)' == 'false'">Off</SignMode>
+    <DriverSign Condition="'$(UndockedSigning)' != 'false'">
+      <FileDigestAlgorithm>$(UndockedSigning)</FileDigestAlgorithm>
+    </DriverSign>
     <EnableInf2cat>false</EnableInf2cat>
     <InfVerif_AdditionalOptions>/msft</InfVerif_AdditionalOptions>
     <SpectreMitigation>Spectre</SpectreMitigation>
