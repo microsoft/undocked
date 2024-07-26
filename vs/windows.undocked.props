@@ -273,7 +273,6 @@
       </PreprocessorDefinitions>
       <AdditionalOptions>
         /d1guard:xfg
-        /d1ignorePragmaWarningError
         /d1import_no_registry
         /d1nodatetime
         /d2AllowCompatibleILVersions
