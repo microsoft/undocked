@@ -175,7 +175,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <!-- Official Windows compiler and linker settings -->
   <PropertyGroup>
-    <UndockedPlatConfig Condition="'$(UndockedPlatConfig)' == ''">$(Platform)_$(Configuration)</UndockedVersioning>
+    <UndockedPlatConfig Condition="'$(UndockedPlatConfig)' == ''">$(Platform)_$(Configuration)</UndockedPlatConfig>
     <IntDir>$(UndockedOut)obj\$(UndockedPlatConfig)\$(ProjectName)\</IntDir>
     <OutDir>$(UndockedOut)bin\$(UndockedPlatConfig)\</OutDir>
     <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
