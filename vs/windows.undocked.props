@@ -134,6 +134,9 @@
     <DriverType>KMDF</DriverType>
     <UndockedKernelModeBuild>true</UndockedKernelModeBuild>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(UndockedType)' == 'none'">
+    <ConfigurationType>none</ConfigurationType>
+  </PropertyGroup>
   <!-- Calculate version properties for resource compile -->
   <Target Name="VersionProperties" BeforeTargets="ClCompile;ResourceCompile" Condition="'$(UndockedVersioning)'!='false'">
     <Exec Command="git describe --long --always --exclude=* --abbrev=8" ConsoleToMSBuild="True" IgnoreExitCode="False">
