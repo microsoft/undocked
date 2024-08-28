@@ -226,6 +226,7 @@
     <!-- Debug/Release related definitions -->
     <ClCompile Condition="'$(Configuration)'=='Debug'">
       <PreprocessorDefinitions>DBG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <ClCompile Condition="'$(Configuration)'=='Release'">
       <PreprocessorDefinitions>NDEBUG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
