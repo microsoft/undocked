@@ -19,7 +19,7 @@ jobs:
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
       steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
       - name: Nuget Restore
@@ -35,7 +35,7 @@ jobs:
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
       steps:
-      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+      - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
       - name: Nuget Restore
