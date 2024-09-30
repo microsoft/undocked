@@ -17,9 +17,6 @@
     <UndockedBuildArm64x Condition="'$(UndockedBuildArm64x)' == '' OR $(ARM64X_DISABLED) == '1'">false</UndockedBuildArm64x>
     <!-- Use the official LKG complier when available -->
     <UseInternalMSUniCrtPackage>true</UseInternalMSUniCrtPackage>
-    <UndockedPlatConfig Condition="'$(UndockedPlatConfig)' == ''">$(Platform)_$(Configuration)</UndockedPlatConfig>
-    <_IntDir>$(UndockedOut)obj\$(UndockedPlatConfig)\$(MSBuildProjectName)\</_IntDir>
-    <MSBuildProjectExtensionsPath Condition="'$(MSBuildProjectExtensionsPath)' == ''">$(_IntDir)</MSBuildProjectExtensionsPath>
   </PropertyGroup>
   <!-- The set of supported user mode configurations (x86,x64,arm,arm64) -->
   <ItemGroup Label="ProjectConfigurations" Condition="'$(UndockedType)' != 'sys'">
@@ -105,6 +102,9 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <Keyword>Win32Proj</Keyword>
+    <UndockedPlatConfig Condition="'$(UndockedPlatConfig)' == ''">$(Platform)_$(Configuration)</UndockedPlatConfig>
+    <_IntDir>$(UndockedOut)obj\$(UndockedPlatConfig)\$(MSBuildProjectName)\</_IntDir>
+    <MSBuildProjectExtensionsPath Condition="'$(MSBuildProjectExtensionsPath)' == ''">$(_IntDir)</MSBuildProjectExtensionsPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'false'">
     <PlatformToolset>v143</PlatformToolset>
