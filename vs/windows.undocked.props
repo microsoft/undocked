@@ -228,10 +228,11 @@
     <!-- Debug/Release related definitions -->
     <ClCompile Condition="'$(Configuration)'=='Debug'">
       <PreprocessorDefinitions>DBG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Condition="'$(Configuration)'=='Release'">
       <PreprocessorDefinitions>NDEBUG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem Condition="'$(UndockedType)' == 'exe'">Console</SubSystem>
@@ -310,6 +311,7 @@
       </AdditionalOptions>
     </ClCompile>
     <Link>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries);libucrt.lib</IgnoreSpecificDefaultLibraries>
       <AdditionalOptions>
         /baserelocclustering
         /Brepro
@@ -324,12 +326,12 @@
         /d2:-SpecDevirt-
         /d2:-TypeProp-
         /debugtype:cv,fixup,pdata
+        /DEFAULTLIB:ucrt.lib
         /filealign:0x1000
         /functionpadmin:6
         /guard:export
         /guard:longjmp
         /guard:mixed
-        /NODEFAULTLIB:libucrt.lib
         /NOVCFEATURE
         /OPT:ICF
         /OPT:REF
