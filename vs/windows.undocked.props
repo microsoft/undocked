@@ -228,10 +228,11 @@
     <!-- Debug/Release related definitions -->
     <ClCompile Condition="'$(Configuration)'=='Debug'">
       <PreprocessorDefinitions>DBG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <ClCompile Condition="'$(Configuration)'=='Release'">
       <PreprocessorDefinitions>NDEBUG;%(ClCompile.PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem Condition="'$(UndockedType)' == 'exe'">Console</SubSystem>
@@ -329,7 +330,6 @@
         /guard:export
         /guard:longjmp
         /guard:mixed
-        /NODEFAULTLIB:libucrt.lib
         /NOVCFEATURE
         /OPT:ICF
         /OPT:REF
@@ -375,6 +375,22 @@
         /highentropyva
         %(AdditionalOptions)
       </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)'=='Debug'">
+        %(AdditionalOptions)
+        /DEFAULTLIB:ucrtd.lib
+      </AdditionalOptions>
+      <AdditionalOptions Condition="'$(Configuration)'=='Release'">
+        %(AdditionalOptions)
+        /DEFAULTLIB:ucrt.lib
+      </AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)'=='Debug'">
+        %(IgnoreSpecificDefaultLibraries);
+        libucrtd.lib
+      </IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries Condition="'$(Configuration)'=='Release'">
+        %(IgnoreSpecificDefaultLibraries);
+        libucrt.lib
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <!-- Enable retpoline for MASM in official builds - template does not currently set this -->
