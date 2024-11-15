@@ -103,8 +103,7 @@
     <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
     <Keyword>Win32Proj</Keyword>
     <UndockedPlatConfig Condition="'$(UndockedPlatConfig)' == ''">$(Platform)_$(Configuration)</UndockedPlatConfig>
-    <_IntDir>$(UndockedOut)obj\$(UndockedPlatConfig)\$(MSBuildProjectName)\</_IntDir>
-    <MSBuildProjectExtensionsPath Condition="'$(MSBuildProjectExtensionsPath)' == ''">$(_IntDir)</MSBuildProjectExtensionsPath>
+    <MSBuildProjectExtensionsPath Condition="'$(MSBuildProjectExtensionsPath)' == ''">$(UndockedOut)obj\$(UndockedPlatConfig)\msbuildext\$(MSBuildProjectName)\</MSBuildProjectExtensionsPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'false'">
     <PlatformToolset>v143</PlatformToolset>
@@ -181,7 +180,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <!-- Official Windows compiler and linker settings -->
   <PropertyGroup>
-    <IntDir>$(_IntDir)</IntDir>
+    <IntDir>$(UndockedOut)obj\$(UndockedPlatConfig)\$(MSBuildProjectName)\</IntDir>
     <OutDir>$(UndockedOut)bin\$(UndockedPlatConfig)\</OutDir>
     <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
     <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
