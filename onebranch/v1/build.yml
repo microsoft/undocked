@@ -156,6 +156,7 @@ jobs:
       platform: $(ob_build_platform)
       configuration: $(ob_build_config)
       maximumCpuCount: true
+      msbuildArchitecture: x64
       msbuildArgs: '-p:UndockedOfficial=${{ parameters.nativeCompiler }} -p:UndockedBuildId=$(Build.BuildId) ${{ parameters.msbuildArgs }}'
   - ${{ if eq(parameters.sign, true) }}:
     # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-platform-services/onebranch/signing
