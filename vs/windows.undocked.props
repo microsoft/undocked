@@ -310,6 +310,7 @@
       </AdditionalOptions>
     </ClCompile>
     <Link>
+      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <AdditionalOptions>
         /baserelocclustering
         /Brepro
