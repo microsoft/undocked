@@ -10,9 +10,9 @@ on:
     - main
 
 jobs:
-    Build-2019:
+    Build-2025:
       needs: []
-      runs-on: windows-2019
+      runs-on: windows-2025
       strategy:
         fail-fast: false
         matrix:
