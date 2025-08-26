@@ -124,7 +124,7 @@ jobs:
     ob_NativeCompiler_TaskVerbosity: 'Detailed'
     ob_NativeCompiler_UseOSBranchVersion: true
     ob_NativeCompiler_TargetOsBranch: ${{ parameters.targetOsBranch }}
-    ob_NativeCompiler_UcrtPlatform: 'amd64'
+    ob_NativeCompiler_UcrtPlatform: '$(ob_build_platform_win)'
     # https://eng.ms/docs/cloud-ai-platform/azure-edge-platform-aep/aep-engineering-systems/productivity-and-experiences/onebranch-windows-undocked/onebranch-windows-undocked/template/thingstoupdateinstartertemplate#2-set-feature-flags---createvpack-and-updateosmanifest
     ${{ if eq(parameters.package, true) }}:
       ob_createvpack_enabled: true
