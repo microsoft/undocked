@@ -25,10 +25,15 @@ jobs:
         uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
         with:
           msbuild-architecture: x64
+          vs-version: ${{ matrix.os == 'windows-2025-vs2026' && '[18.0,19.0)' || '[17.0,18.0)' }}
       - name: Nuget Restore
         run: nuget.exe restore templates/templates.sln
       - name: Build
+        if: matrix.os != 'windows-2025-vs2026'
         run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+      - name: Build VS 2026 projects
+        if: matrix.os == 'windows-2025-vs2026'
+        run: msbuild templates/templates.sln '/t:dll;lib' /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
     Complete:
       name: Complete
       if: always()

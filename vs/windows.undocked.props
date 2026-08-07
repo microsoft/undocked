@@ -113,9 +113,6 @@
   <PropertyGroup Condition="'$(UndockedUseDriverToolset)' == 'true'">
     <PlatformToolset>WindowsApplicationForDrivers10.0</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(UndockedType)' == 'drvlib' OR '$(UndockedType)' == 'sys'">
-    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <!-- Per-type Configuration -->
   <PropertyGroup Condition="'$(UndockedType)' == 'lib'">
@@ -129,11 +126,13 @@
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedType)' == 'drvlib'">
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <DriverType>KMDF</DriverType>
     <UndockedKernelModeBuild>true</UndockedKernelModeBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedType)' == 'sys'">
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
     <ConfigurationType>Driver</ConfigurationType>
     <DriverType>KMDF</DriverType>
     <UndockedKernelModeBuild>true</UndockedKernelModeBuild>
