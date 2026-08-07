@@ -16,7 +16,7 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          os: [windows-2022, windows-2025, windows-2025-vs2026]
+          os: [windows-2022, windows-2025]
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
       steps:
@@ -27,14 +27,8 @@ jobs:
           msbuild-architecture: x64
       - name: Nuget Restore
         run: nuget.exe restore templates/templates.sln
-      # Only Windows Server 2022 ships the WDK Visual Studio integration, so it is the only image that can build the driver projects.
       - name: Build
-        if: matrix.os == 'windows-2022'
         run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
-      # VS 2026 images have no WDK MSBuild integration yet, so build only the user-mode projects (exercises the v145 toolset).
-      - name: Build user-mode projects
-        if: matrix.os != 'windows-2022'
-        run: msbuild templates/templates.sln /t:"dll;lib" /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
     Complete:
       name: Complete
       if: always()
