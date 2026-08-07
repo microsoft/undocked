@@ -177,26 +177,6 @@
       </ResourceCompile>
     </ItemGroup>
   </Target>
-  <!-- Consume the WDK from NuGet so driver projects build without the VS-integrated WDK. -->
-  <PropertyGroup>
-    <UndockedUseWdk Condition="'$(UndockedUseWdk)' == '' and ('$(UndockedKernelModeBuild)' == 'true' or '$(UndockedUseDriverToolset)' == 'true')">true</UndockedUseWdk>
-    <UndockedUseWdk Condition="'$(UndockedUseWdk)' == ''">false</UndockedUseWdk>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(UndockedUseWdk)' == 'true'">
-    <WdkArch Condition="'$(Platform)' == 'Win32'">x86</WdkArch>
-    <WdkArch Condition="'$(Platform)' == 'x64'">x64</WdkArch>
-    <WdkArch Condition="'$(Platform)' == 'ARM64'">arm64</WdkArch>
-    <!-- VS 2026 (v145) ships a newer WDK than VS 2022. -->
-    <WDKVersion Condition="'$(WDKVersion)' == '' and '$(VisualStudioVersion)' == '18.0'">10.0.28000.1839</WDKVersion>
-    <WDKVersion Condition="'$(WDKVersion)' == ''">10.0.26100.6584</WDKVersion>
-    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == '' and '$(VisualStudioVersion)' == '18.0'">10.0.28000.0</WindowsTargetPlatformVersion>
-    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)' == ''">10.0.26100.0</WindowsTargetPlatformVersion>
-  </PropertyGroup>
-  <ImportGroup Condition="'$(UndockedUseWdk)' == 'true'" Label="WdkNuGet">
-    <Import Project="$(SolutionDir)packages\Microsoft.Windows.SDK.CPP.$(WDKVersion)\build\native\Microsoft.Windows.SDK.cpp.props" Condition="Exists('$(SolutionDir)packages\Microsoft.Windows.SDK.CPP.$(WDKVersion)\build\native\Microsoft.Windows.SDK.cpp.props')" />
-    <Import Project="$(SolutionDir)packages\Microsoft.Windows.SDK.CPP.$(WdkArch).$(WDKVersion)\build\native\Microsoft.Windows.SDK.cpp.$(WdkArch).props" Condition="Exists('$(SolutionDir)packages\Microsoft.Windows.SDK.CPP.$(WdkArch).$(WDKVersion)\build\native\Microsoft.Windows.SDK.cpp.$(WdkArch).props')" />
-    <Import Project="$(SolutionDir)packages\Microsoft.Windows.WDK.$(WdkArch).$(WDKVersion)\build\native\Microsoft.Windows.WDK.$(WdkArch).props" Condition="Exists('$(SolutionDir)packages\Microsoft.Windows.WDK.$(WdkArch).$(WDKVersion)\build\native\Microsoft.Windows.WDK.$(WdkArch).props')" />
-  </ImportGroup>
   <!-- Import the default build properties first -->
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <!-- Official Windows compiler and linker settings -->

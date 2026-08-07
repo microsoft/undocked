@@ -27,8 +27,14 @@ jobs:
           msbuild-architecture: x64
       - name: Nuget Restore
         run: nuget.exe restore templates/templates.sln
+      # Windows Server 2022 has the WDK Visual Studio integration, so it builds every project.
       - name: Build
+        if: matrix.os == 'windows-2022'
         run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+      # The VS 2026 image has no integrated WDK toolset, so build only the user-mode projects.
+      - name: Build user-mode projects
+        if: matrix.os != 'windows-2022'
+        run: msbuild templates/templates.sln /t:"dll;lib" /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
     Complete:
       name: Complete
       if: always()

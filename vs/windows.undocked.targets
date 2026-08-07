@@ -5,7 +5,6 @@
     <Import Project="$(SolutionDir)packages\Microsoft.SourceLink.Common.1.0.0\build\Microsoft.SourceLink.Common.targets" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.SourceLink.Common.1.0.0\build\Microsoft.SourceLink.Common.targets')" />
     <Import Project="$(SolutionDir)packages\Microsoft.SourceLink.GitHub.1.0.0\build\Microsoft.SourceLink.GitHub.targets" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.SourceLink.GitHub.1.0.0\build\Microsoft.SourceLink.GitHub.targets')" />
     <Import Project="$(SolutionDir)packages\Microsoft.SourceLink.AzureRepos.Git.1.0.0\build\Microsoft.SourceLink.AzureRepos.Git.targets" Condition="$(UndockedSourceLink) AND Exists('$(SolutionDir)packages\Microsoft.SourceLink.AzureRepos.Git.1.0.0\build\Microsoft.SourceLink.AzureRepos.Git.targets')" />
-    <Import Project="$(SolutionDir)packages\Microsoft.Windows.SDK.CPP.$(WDKVersion)\build\native\Microsoft.Windows.SDK.cpp.targets" Condition="'$(UndockedUseWdk)' == 'true' AND Exists('$(SolutionDir)packages\Microsoft.Windows.SDK.CPP.$(WDKVersion)\build\native\Microsoft.Windows.SDK.cpp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
