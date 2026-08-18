@@ -6,7 +6,8 @@
     <UndockedType>sys</UndockedType>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
-    <UndockedSourceLink>true</UndockedSourceLink>
+    <!-- SourceLink is consumed via PackageReference (below) instead of the legacy packages folder. -->
+    <UndockedSourceLink>false</UndockedSourceLink>
     <!-- Consume the WDK/SDK from NuGet so drivers build without a machine-wide WDK install.
          The package must match the Visual Studio build tools: VS 2022 (17.0) ships the 17.0
          driver build tasks, VS 2026 (18.0) ships the 18.0 tasks; no single package has both. -->

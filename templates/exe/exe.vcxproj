@@ -6,7 +6,8 @@
     <UndockedType>exe</UndockedType>
     <UndockedLoc>true</UndockedLoc>
     <UndockedUseDriverToolset>true</UndockedUseDriverToolset>
-    <UndockedSourceLink>true</UndockedSourceLink>
+    <!-- SourceLink is consumed via PackageReference (below) instead of the legacy packages folder. -->
+    <UndockedSourceLink>false</UndockedSourceLink>
     <CharacterSet>Unicode</CharacterSet>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
