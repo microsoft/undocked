@@ -6,13 +6,9 @@
     <UndockedType>lib</UndockedType>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
-    <!-- SourceLink is consumed via PackageReference (below) instead of the legacy packages folder. -->
-    <UndockedSourceLink>false</UndockedSourceLink>
+    <UndockedSourceLink>true</UndockedSourceLink>
   </PropertyGroup>
   <Import Project="$(UndockedDir)vs\windows.undocked.props" />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="static_library.c" />
   </ItemGroup>
