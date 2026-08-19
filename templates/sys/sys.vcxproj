@@ -6,35 +6,8 @@
     <UndockedType>sys</UndockedType>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
-    <!-- SourceLink is consumed via PackageReference (below) instead of the legacy packages folder. -->
-    <UndockedSourceLink>false</UndockedSourceLink>
-    <!-- Native projects trip a legacy NuGet asset-resolution task (Microsoft.NuGet.targets); disable it. -->
-    <ResolveNuGetPackages>false</ResolveNuGetPackages>
-    <!-- Consume the WDK/SDK from NuGet so drivers build without a machine-wide WDK install.
-         The package must match the Visual Studio build tools: VS 2022 (17.0) ships the 17.0
-         driver build tasks, VS 2026 (18.0) ships the 18.0 tasks; no single package has both. -->
-    <UndockedWdkVersion>10.0.26100.6584</UndockedWdkVersion>
-    <UndockedWdkVersion Condition="'$(VisualStudioVersion)' == '18.0'">10.0.28000.2526</UndockedWdkVersion>
-    <!-- Map the MSBuild platform to the NuGet package architecture suffix. -->
-    <UndockedWdkArch>$(Platform.ToLowerInvariant())</UndockedWdkArch>
-    <UndockedWdkArch Condition="'$(Platform)' == 'Win32'">x86</UndockedWdkArch>
-    <UndockedWdkArch Condition="'$(Platform)' == 'ARM64EC'">arm64</UndockedWdkArch>
-    <UndockedWdkHostArch>$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)</UndockedWdkHostArch>
-    <UndockedWdkHostArch>$(UndockedWdkHostArch.ToLowerInvariant())</UndockedWdkHostArch>
-    <!-- The WDK NuGet package only ships host-architecture build tools; use them for cross builds. -->
-    <PreferredToolArchitecture>$(UndockedWdkHostArch)</PreferredToolArchitecture>
   </PropertyGroup>
   <Import Project="$(UndockedDir)vs\windows.undocked.props" />
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    <!-- SDK headers/libs for the target (and host, when cross-compiling). -->
-    <PackageReference Include="Microsoft.Windows.SDK.cpp.$(UndockedWdkArch)" Version="$(UndockedWdkVersion)" />
-    <PackageReference Include="Microsoft.Windows.SDK.cpp.$(UndockedWdkHostArch)" Version="$(UndockedWdkVersion)" Condition="'$(UndockedWdkHostArch)' != '$(UndockedWdkArch)'" />
-    <!-- WDK build tasks (a host tool) plus the target kernel libraries. There is no x86 WDK
-         package, but user-mode targets only need the host WDK for the build tasks. -->
-    <PackageReference Include="Microsoft.Windows.WDK.$(UndockedWdkHostArch)" Version="$(UndockedWdkVersion)" />
-    <PackageReference Include="Microsoft.Windows.WDK.$(UndockedWdkArch)" Version="$(UndockedWdkVersion)" Condition="'$(UndockedWdkArch)' != '$(UndockedWdkHostArch)' AND '$(UndockedWdkArch)' != 'x86'" />
-  </ItemGroup>
   <ItemGroup>
     <ClCompile Include="driver.c" />
     <ResourceCompile Include="sys.rc" />
