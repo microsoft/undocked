@@ -16,8 +16,9 @@ jobs:
       strategy:
         fail-fast: false
         matrix:
-          # windows-2022 provides Visual Studio 2022 (v143); windows-2025-vs2026 provides Visual
-          # Studio 2026 (v145). Both images include the WDK, which supplies the driver toolsets.
+          # windows-2022 provides Visual Studio 2022 (v143), windows-2025-vs2026 provides
+          # Visual Studio 2026 (v145). The WDK/SDK are consumed from NuGet, so drivers build on
+          # both without a machine-wide WDK install.
           os: [windows-2022, windows-2025-vs2026]
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
@@ -27,10 +28,17 @@ jobs:
         uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
         with:
           msbuild-architecture: x64
-      - name: Nuget Restore
-        run: nuget.exe restore templates/templates.sln
+      # Restore is per-platform because the WDK/SDK PackageReference ids embed the architecture.
+      - name: Restore
+        run: msbuild templates/templates.sln /t:restore /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+      # muirct (used by the localization post-build step) ships only in the installed Windows SDK,
+      # not the NuGet SDK, so add its bin directory to PATH before building.
       - name: Build
-        run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+        shell: pwsh
+        run: |
+          $muirct = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\muirct.exe' -ErrorAction SilentlyContinue | Sort-Object FullName | Select-Object -Last 1
+          if ($muirct) { $env:PATH = "$($muirct.DirectoryName);$env:PATH" }
+          msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
     Complete:
       name: Complete
       if: always()
