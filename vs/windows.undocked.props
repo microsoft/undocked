@@ -144,23 +144,17 @@
     By default undocked pulls in the NuGet packages its projects need: SourceLink for every real
     project, and the WDK/SDK for driver-toolset projects (no machine-wide WDK is required, and the
     VS 2026 runner image's installed WDK cannot build drivers). A consumer that supplies its own
-    packages can opt out with UndockedUsePackageReferences=false, and can override the version with
-    UndockedWdkVersion.
+    packages can opt out with UndockedUsePackageReferences=false. Package versions are pinned via
+    central package management in Directory.Packages.props.
   -->
-  <PropertyGroup Condition="'$(UndockedWdkVersion)' == ''">
-    <!-- Match the WDK NuGet package to the VS build tools: VS 2022 (17.0) ships the 17.0 driver
-         build tasks, VS 2026 (18.0) ships the 18.0 tasks; no single package has both. -->
-    <UndockedWdkVersion Condition="'$(VisualStudioVersion)' == '17.0'">10.0.26100.6584</UndockedWdkVersion>
-    <UndockedWdkVersion Condition="'$(VisualStudioVersion)' == '18.0'">10.0.28000.2526</UndockedWdkVersion>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(UndockedUsePackageReferences)' != 'false' AND '$(UndockedType)' != 'none'">
     <!-- Native projects trip a legacy NuGet asset-resolution task (Microsoft.NuGet.targets); disable it. -->
     <ResolveNuGetPackages>false</ResolveNuGetPackages>
   </PropertyGroup>
   <ItemGroup Condition="'$(UndockedUsePackageReferences)' != 'false' AND '$(UndockedType)' != 'none'">
     <!-- SourceLink providers for both git hosts; only the one matching the repo remote is active. -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" Version="1.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.SourceLink.AzureRepos.Git" PrivateAssets="all" />
   </ItemGroup>
   <PropertyGroup Condition="'$(UndockedUsePackageReferences)' != 'false' AND ('$(UndockedKernelModeBuild)' == 'true' OR '$(UndockedUseDriverToolset)' == 'true')">
     <!-- Map the MSBuild platform to the NuGet package architecture suffix. -->
@@ -174,12 +168,12 @@
   </PropertyGroup>
   <ItemGroup Condition="'$(UndockedUsePackageReferences)' != 'false' AND ('$(UndockedKernelModeBuild)' == 'true' OR '$(UndockedUseDriverToolset)' == 'true')">
     <!-- SDK headers/libs for the target (and host, when cross-compiling). -->
-    <PackageReference Include="Microsoft.Windows.SDK.cpp.$(UndockedWdkArch)" Version="$(UndockedWdkVersion)" />
-    <PackageReference Include="Microsoft.Windows.SDK.cpp.$(UndockedWdkHostArch)" Version="$(UndockedWdkVersion)" Condition="'$(UndockedWdkHostArch)' != '$(UndockedWdkArch)'" />
+    <PackageReference Include="Microsoft.Windows.SDK.cpp.$(UndockedWdkArch)" />
+    <PackageReference Include="Microsoft.Windows.SDK.cpp.$(UndockedWdkHostArch)" Condition="'$(UndockedWdkHostArch)' != '$(UndockedWdkArch)'" />
     <!-- WDK build tasks (a host tool) plus the target kernel libraries. There is no x86 WDK
          package, but user-mode targets only need the host WDK for the build tasks. -->
-    <PackageReference Include="Microsoft.Windows.WDK.$(UndockedWdkHostArch)" Version="$(UndockedWdkVersion)" />
-    <PackageReference Include="Microsoft.Windows.WDK.$(UndockedWdkArch)" Version="$(UndockedWdkVersion)" Condition="'$(UndockedWdkArch)' != '$(UndockedWdkHostArch)' AND '$(UndockedWdkArch)' != 'x86'" />
+    <PackageReference Include="Microsoft.Windows.WDK.$(UndockedWdkHostArch)" />
+    <PackageReference Include="Microsoft.Windows.WDK.$(UndockedWdkArch)" Condition="'$(UndockedWdkArch)' != '$(UndockedWdkHostArch)' AND '$(UndockedWdkArch)' != 'x86'" />
   </ItemGroup>
   <!-- Calculate version properties for resource compile -->
   <Target Name="VersionProperties" BeforeTargets="ClCompile;ResourceCompile" Condition="'$(UndockedVersioning)'!='false'">
