@@ -17,8 +17,7 @@ jobs:
         fail-fast: false
         matrix:
           # windows-2022 provides Visual Studio 2022 (v143), windows-2025-vs2026 provides
-          # Visual Studio 2026 (v145). The WDK/SDK are consumed from NuGet, so drivers build on
-          # both without a machine-wide WDK install.
+          # Visual Studio 2026 (v145).
           os: [windows-2022, windows-2025-vs2026]
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
