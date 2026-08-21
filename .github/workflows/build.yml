@@ -10,35 +10,42 @@ on:
     - main
 
 jobs:
-    Build-2019:
-      needs: []
-      runs-on: windows-2019
-      strategy:
-        fail-fast: false
-        matrix:
-          configuration: [Debug, Release]
-          platform: [x86, x64, ARM64]
-      steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
-      - name: Nuget Restore
-        run: nuget.exe restore templates/templates.sln
-      - name: Build
-        run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
     Build:
       needs: []
-      runs-on: windows-latest
+      runs-on: ${{ matrix.os }}
       strategy:
         fail-fast: false
         matrix:
+          # windows-2022 provides Visual Studio 2022 (v143), windows-2025-vs2026 provides
+          # Visual Studio 2026 (v145).
+          os: [windows-2022, windows-2025-vs2026]
           configuration: [Debug, Release]
           platform: [x86, x64, ARM64]
       steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce
-      - name: Nuget Restore
-        run: nuget.exe restore templates/templates.sln
+        with:
+          msbuild-architecture: x64
+      # Restore is per-platform because the WDK/SDK PackageReference ids embed the architecture.
+      - name: Restore
+        run: msbuild templates/templates.sln /t:restore /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+      # muirct (used by the localization post-build step) ships only in the installed Windows SDK,
+      # not the NuGet SDK, so add its bin directory to PATH before building.
       - name: Build
-        run: msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+        shell: pwsh
+        run: |
+          $muirct = Get-ChildItem 'C:\Program Files (x86)\Windows Kits\10\bin\*\x64\muirct.exe' -ErrorAction SilentlyContinue | Sort-Object FullName | Select-Object -Last 1
+          if ($muirct) { $env:PATH = "$($muirct.DirectoryName);$env:PATH" }
+          msbuild templates/templates.sln /p:Configuration=${{ matrix.configuration }} /p:Platform=${{ matrix.platform }}
+    Complete:
+      name: Complete
+      if: always()
+      needs: Build
+      runs-on: ubuntu-latest
+      permissions: {}
+      steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@05ac9388f0aebcb5727afa17fcccfecd6f8ec5fe
+        with:
+          jobs: ${{ toJSON(needs) }}

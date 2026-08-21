@@ -6,7 +6,6 @@
     <UndockedType>exe</UndockedType>
     <UndockedLoc>true</UndockedLoc>
     <UndockedUseDriverToolset>true</UndockedUseDriverToolset>
-    <UndockedSourceLink>true</UndockedSourceLink>
     <CharacterSet>Unicode</CharacterSet>
     <UndockedDir>$(SolutionDir)..\</UndockedDir>
     <UndockedOut>$(SolutionDir)..\build\</UndockedOut>
